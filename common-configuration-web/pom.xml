@@ -11,5 +11,11 @@
 
     <artifactId>common-configuration-web</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
