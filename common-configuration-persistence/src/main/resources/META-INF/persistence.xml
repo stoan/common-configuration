@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
-    <persistence-unit name="PropertiesPersistenceUnit">
-
-        <jta-data-source>java:/XAPropertiesDS</jta-data-source>
-
-        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+    <persistence-unit name="commonconfPU" transaction-type="RESOURCE_LOCAL">
 
         <properties>
-            <property name="hibernate.ejb.naming_strategy"
-                      value="za.co.fnb.cii.common.persistence.naming.CIINamingStrategy"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
-            <property name="hibernate.archive.autodetection" value="class"/>
-            <property name="hibernate.flushMode" value="FLUSH_AUTO"/>
-            <property name="hibernate.hbm2ddl.auto" value="validate"/>
-            <property name="hibernate.show_sql" value="true"/>
-
-            <!-- 2nd level cache -->
-            <property name="hibernate.cache.use_second_level_cache" value="true"/>
-            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+            <property name="javax.persistence.jdbc.url"    value="jdbc:h2:mem:commonconf" />
+            <property name="javax.persistence.jdbc.user" value="sa" />
+            <property name="javax.persistence.jdbc.password" value="" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
+            <property name="show_sql" value="true"/>
+            <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
         </properties>
-
     </persistence-unit>
 </persistence>
