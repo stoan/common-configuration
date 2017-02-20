@@ -11,4 +11,12 @@
 
     <artifactId>common-configuration-web</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.housescent.common-configuration</groupId>
+            <artifactId>common-configuration-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>

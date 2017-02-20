@@ -10,5 +10,5 @@ import org.apache.deltaspike.data.api.Repository;
 @Repository
 public interface ApplicationRepository extends EntityRepository<Application,Long> {
 
-
+    Application findByApplicationname(String applicationName);
 }

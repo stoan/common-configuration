@@ -10,9 +10,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>common-configuration-service</artifactId>
+    <packaging>ejb</packaging>
 
 
     <dependencies>
+        <dependency>
+            <groupId>com.housescent.common-configuration</groupId>
+            <artifactId>common-configuration-persistence</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
             <artifactId>jboss-ejb-api_3.2_spec</artifactId>
