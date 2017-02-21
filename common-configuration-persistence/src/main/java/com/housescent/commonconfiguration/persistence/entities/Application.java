@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Created by s983620 - Siya Sosibo on 07/02/2017.
+ * Created by Siya Sosibo on 07/02/2017.
  */
 @Entity
 public class Application extends BaseEntity implements Serializable{

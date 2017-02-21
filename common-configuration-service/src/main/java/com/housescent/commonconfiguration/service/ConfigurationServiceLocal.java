@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by F4902718 - Siya Sosibo on 13-Jan-16.
+ * Created by Siya Sosibo on 13-Jan-16.
  */
 @Local
 public interface ConfigurationServiceLocal {
@@ -25,7 +25,7 @@ public interface ConfigurationServiceLocal {
 
     void deleteProperty(String applicationName, String key);
 
-    void deleteAllApplication(String applicationName);
+    void deleteApplication(String applicationName);
 
     boolean addApplication(String applicationName, String description) throws SettingsException;
 

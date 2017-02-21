@@ -10,7 +10,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 /**
- * Created by F4902718 - Siya Sosibo on 17-Mar-16 17:09.
+ * Created by Siya Sosibo on 17-Mar-16 17:09.
  */
 @Stateless
 public class SettingServiceImplHelper {

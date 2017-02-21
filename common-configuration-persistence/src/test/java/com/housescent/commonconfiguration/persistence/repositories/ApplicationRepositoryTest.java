@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 
 /**
- * Created by s983620 on 16/02/2017.
+ * Created by Siya Sosibo on 16/02/2017.
  */
 @RunWith(CdiTestRunner.class)
 public class ApplicationRepositoryTest {

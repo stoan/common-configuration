@@ -7,7 +7,7 @@ import org.apache.deltaspike.data.api.Repository;
 import java.util.List;
 
 /**
- * Created by S983620 - Siya Sosibo on 13/02/2017.
+ * Created by Siya Sosibo on 13/02/2017.
  */
 @Repository
 public interface PropertyRepository extends EntityRepository<Property,Long>{

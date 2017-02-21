@@ -5,7 +5,7 @@ import org.apache.deltaspike.data.api.EntityRepository;
 import org.apache.deltaspike.data.api.Repository;
 
 /**
- * Created by S983620 Siya Sosibo on 13/02/2017.
+ * Created by Siya Sosibo on 13/02/2017.
  */
 @Repository
 public interface ApplicationRepository extends EntityRepository<Application,Long> {

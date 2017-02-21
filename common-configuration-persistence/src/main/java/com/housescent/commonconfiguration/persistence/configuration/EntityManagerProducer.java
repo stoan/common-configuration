@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * Created by F4902718 on 16-Nov-15.
+ * Created by Siya Sosibo on 16-Nov-15.
  */
 @ApplicationScoped
 public class EntityManagerProducer {

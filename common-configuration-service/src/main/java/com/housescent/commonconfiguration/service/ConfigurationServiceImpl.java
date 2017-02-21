@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by F4902718 - Siya Sosibo on 13-Jan-16.
+ * Created by  Siya Sosibo on 13-Jan-16.
  */
 @Stateless
 @Remote(ConfigurationServiceRemote.class)
@@ -101,7 +101,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     }
 
     @Override
-    public void deleteAllApplication(String applicationName) {
+    public void deleteApplication(String applicationName) {
         Application application = applicationRepository.findByApplicationname(applicationName);
         if (application != null) {
             applicationRepository.remove(application);

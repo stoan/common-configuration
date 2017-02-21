@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Created by S983620 - Siya Sosibo on 13/02/2017.
+ * Created by Siya Sosibo on 13/02/2017.
  */
 @Entity
 @Table(uniqueConstraints =

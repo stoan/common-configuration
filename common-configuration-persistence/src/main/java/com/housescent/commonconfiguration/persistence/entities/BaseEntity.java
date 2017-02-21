@@ -3,7 +3,7 @@ package com.housescent.commonconfiguration.persistence.entities;
 import javax.persistence.*;
 
 /**
- * Created by S983620 - Siya Sosibo on 13/02/2017.
+ * Created by Siya Sosibo on 13/02/2017.
  */
 @MappedSuperclass
 public class BaseEntity {
