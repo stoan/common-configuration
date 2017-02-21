@@ -1,19 +1,22 @@
 package com.housescent.commonconfiguration.service;
 
 
+import com.housescent.commonconfiguration.api.exception.SettingNotFoundException;
+import com.housescent.commonconfiguration.api.exception.SettingsException;
+import com.housescent.commonconfiguration.api.service.ConfigurationServiceRemote;
+import com.housescent.commonconfiguration.persistence.entities.Application;
 import com.housescent.commonconfiguration.persistence.entities.Property;
 import com.housescent.commonconfiguration.persistence.repositories.ApplicationRepository;
 import com.housescent.commonconfiguration.persistence.repositories.PropertyRepository;
-import org.apache.commons.collections4.CollectionUtils;
-
 
 import javax.ejb.*;
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by F4902718 on 13-Jan-16.
+ * Created by F4902718 - Siya Sosibo on 13-Jan-16.
  */
 @Stateless
 @Remote(ConfigurationServiceRemote.class)
@@ -28,21 +31,19 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     private ApplicationRepository applicationRepository;
 
     @Override
-    public String getPropertyValue(String applicationName, String key) throws DuplicateSettingException, SettingNotFoundException {
-        List<Property> properties = propertyRepository.getPropertyValue(applicationName, key);
+    public String getPropertyValue(String applicationName, String key) {
+        Property property = propertyRepository.findByApplication_applicationNameAndKey(applicationName, key);
 
-        if (CollectionUtils.isNotEmpty(properties) && properties.size() == 1) {
-            return properties.get(0).getValue();
-        } else if (CollectionUtils.isNotEmpty(properties) && properties.size() > 1) {
-            throw new DuplicateSettingException("Multiple properties found for application name: " + applicationName + " and key: " + key);
+        if (property != null) {
+            return property.getValue();
         } else {
-            throw new SettingNotFoundException("Property value not found for application name: " + applicationName + " and key: " + key);
+            return null;
         }
     }
 
     @Override
-    public List<Property> getPropertiesForApplication(String applicationName) throws DuplicateSettingException, SettingNotFoundException {
-        List<Property> properties = propertyRepository.getPropertiesForApplication(applicationName);
+    public List<Property> getPropertiesForApplication(String applicationName) throws SettingNotFoundException {
+        List<Property> properties = propertyRepository.findByApplication_applicationName(applicationName);
 
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(properties)) {
             throw new SettingNotFoundException("Application settings not found for application name: " + applicationName);
@@ -51,13 +52,17 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
         return properties;
     }
 
-    @Deprecated
     @Override
-    public Map<String, String> getPropertiesForApplicationAsMap(String applicationName) throws DuplicateSettingException, SettingNotFoundException {
-        Map<String, String> properties = propertyRepository.getPropertiesForApplicationAsMap(applicationName);
+    public Map<String, String> getPropertiesForApplicationAsMap(String applicationName) throws SettingNotFoundException {
+        List<Property> props = propertyRepository.findByApplication_applicationName(applicationName);
 
-        if (properties == null || properties.isEmpty()) {
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(props)) {
             throw new SettingNotFoundException("Application settings not found for application name: " + applicationName);
+        }
+
+        Map<String, String> properties = new HashMap<>();
+        for (Property prop : props) {
+            properties.put(prop.getKey(), prop.getValue());
         }
         return properties;
     }
@@ -78,25 +83,29 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public boolean updateProperty(String applicationName, String key, String value) throws SettingsException {
-        boolean isSaved;
+    public void updateProperty(String applicationName, String key, String value) throws SettingsException {
+
         try {
-            isSaved = settingServiceImplHelper.updateProperty(applicationName, key, value);
+           settingServiceImplHelper.updateProperty(applicationName, key, value);
         } catch (Exception e) {
             throw new SettingsException("Property not updated" + System.lineSeparator() + e.getMessage());
         }
-
-        return isSaved;
     }
 
     @Override
     public void deleteProperty(String applicationName, String key) {
-        propertyRepository.deteleProperty(applicationName, key);
+        Property property = propertyRepository.findByApplication_applicationNameAndKey(applicationName, key);
+        if (property != null) {
+            propertyRepository.remove(property);
+        }
     }
 
     @Override
     public void deleteAllApplication(String applicationName) {
-        applicationRepository.deleteApplication(applicationName);
+        Application application = applicationRepository.findByApplicationname(applicationName);
+        if (application != null) {
+            applicationRepository.remove(application);
+        }
     }
 
     @Override
@@ -114,13 +123,11 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public boolean updateApplication(String applicationName, String description) throws SettingsException {
-        boolean isSaved;
+    public void updateApplication(String applicationName, String description) throws SettingsException {
         try {
-            isSaved = settingServiceImplHelper.updateApplication(applicationName, description);
+            settingServiceImplHelper.updateApplication(applicationName, description);
         } catch (Exception e) {
             throw new SettingsException("Application not updated" + System.lineSeparator() + e.getMessage());
         }
-        return isSaved;
     }
 }

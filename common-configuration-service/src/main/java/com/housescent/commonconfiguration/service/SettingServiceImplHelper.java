@@ -1,5 +1,6 @@
 package com.housescent.commonconfiguration.service;
 
+import com.housescent.commonconfiguration.api.exception.SettingsException;
 import com.housescent.commonconfiguration.persistence.entities.Application;
 import com.housescent.commonconfiguration.persistence.entities.Property;
 import com.housescent.commonconfiguration.persistence.repositories.ApplicationRepository;
@@ -22,30 +23,33 @@ public class SettingServiceImplHelper {
 
     public boolean addApplication(String applicationName, String description) throws SettingsException {
 
-        Application application = applicationRepository.saveApplication(applicationName, description);
+        Application application = applicationRepository.save(new Application(applicationName,description));
 
-        return application != null;
+        return application.getId() > 0;
     }
 
+    public void updateApplication(String applicationName, String description) throws SettingsException {
 
-    public boolean updateApplication(String applicationName, String description) throws SettingsException {
-
-        Application application = applicationRepository.updateApplication(applicationName, description);
-
-        return application != null;
+        Application application = applicationRepository.findByApplicationname(applicationName);
+        application.setDescription(description);
     }
 
     public boolean addProperty(String applicationName, String key, String value) throws SettingsException {
 
-        Property property = propertyRepository.saveProperty(applicationName, key, value);
+        Application application = applicationRepository.findByApplicationname(applicationName);
 
-        return property != null;
+        if (application == null) {
+          application = applicationRepository.save(new Application(applicationName,applicationName));
+        }
+
+        Property property = propertyRepository.save(new Property(key, value, application));
+
+        return property.getId() > 0;
     }
 
-    public boolean updateProperty(String applicationName, String key, String value) throws SettingsException {
+    public void updateProperty(String applicationName, String key, String value) throws SettingsException {
 
-        Property property = propertyRepository.updateProperty(applicationName, key, value);
-
-        return property != null;
+        Property property = propertyRepository.findByApplication_applicationNameAndKey(applicationName, key);
+        property.setValue(value);
     }
 }

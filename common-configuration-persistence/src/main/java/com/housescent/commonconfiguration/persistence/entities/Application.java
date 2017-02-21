@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Created by s983620 on 07/02/2017.
+ * Created by s983620 - Siya Sosibo on 07/02/2017.
  */
 @Entity
 public class Application extends BaseEntity implements Serializable{
@@ -14,6 +14,14 @@ public class Application extends BaseEntity implements Serializable{
     @Column(nullable = false, unique = true, length = 100)
     private String applicationName;
     private String description;
+
+    public Application() {
+    }
+
+    public Application(String applicationName, String description) {
+        this.applicationName = applicationName;
+        this.description = description;
+    }
 
     public String getApplicationName() {
         return applicationName;

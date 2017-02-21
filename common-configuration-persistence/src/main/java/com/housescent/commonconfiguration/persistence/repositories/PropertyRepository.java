@@ -12,4 +12,7 @@ import java.util.List;
 @Repository
 public interface PropertyRepository extends EntityRepository<Property,Long>{
 
+    Property findByApplication_applicationNameAndKey(String applicationName,String key);
+
+    List<Property> findByApplication_applicationName(String applicationName);
 }

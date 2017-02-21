@@ -1,5 +1,6 @@
 package com.housescent.commonconfiguration.service;
 
+import com.housescent.commonconfiguration.api.exception.SettingsException;
 import com.housescent.commonconfiguration.persistence.entities.Property;
 
 import javax.ejb.Local;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by F4902718 on 13-Jan-16.
+ * Created by F4902718 - Siya Sosibo on 13-Jan-16.
  */
 @Local
 public interface ConfigurationServiceLocal {
@@ -20,7 +21,7 @@ public interface ConfigurationServiceLocal {
 
     boolean addProperty(String applicationName, String key, String value) throws SettingsException;
 
-    boolean updateProperty(String applicationName, String key, String value) throws SettingsException;
+    void updateProperty(String applicationName, String key, String value) throws SettingsException;
 
     void deleteProperty(String applicationName, String key);
 
@@ -28,6 +29,6 @@ public interface ConfigurationServiceLocal {
 
     boolean addApplication(String applicationName, String description) throws SettingsException;
 
-    boolean updateApplication(String applicationName, String description) throws SettingsException;
+    void updateApplication(String applicationName, String description) throws SettingsException;
 
 }

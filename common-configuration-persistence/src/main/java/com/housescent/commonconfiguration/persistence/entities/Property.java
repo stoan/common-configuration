@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Created by S983620 on 13/02/2017.
+ * Created by S983620 - Siya Sosibo on 13/02/2017.
  */
 @Entity
 @Table(uniqueConstraints =
@@ -21,6 +21,15 @@ public class Property extends BaseEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "APPLICATIONS_ID")
     private Application application;
+
+    public Property() {
+    }
+
+    public Property(String key, String value, Application application) {
+        this.key = key;
+        this.value = value;
+        this.application = application;
+    }
 
     public String getKey() {
         return key;
