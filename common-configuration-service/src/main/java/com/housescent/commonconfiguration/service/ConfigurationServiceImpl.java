@@ -34,7 +34,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     private ApplicationRepository applicationRepository;
 
     @Override
-    public String getPropertyValue(String applicationName, String key) throws SettingNotFoundException {
+    public String getPropertyValue(String applicationName, String key) {
         Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
 
         if (property != null) {
@@ -45,7 +45,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     }
 
     @Override
-    public List<Property> getPropertiesForApplication(String applicationName) throws SettingNotFoundException {
+    public List<Property> getPropertiesForApplication(String applicationName) {
         List<Property> properties = propertyRepository.findByApplication_applicationNameIgnoreCase(applicationName);
 
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(properties)) {
@@ -56,7 +56,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     }
 
     @Override
-    public Map<String, String> getPropertiesForApplicationAsMap(String applicationName) throws SettingNotFoundException {
+    public Map<String, String> getPropertiesForApplicationAsMap(String applicationName) {
         List<Property> props = propertyRepository.findByApplication_applicationNameIgnoreCase(applicationName);
 
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(props)) {
@@ -73,7 +73,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public boolean addProperty(String applicationName, String key, String value) throws SettingsException {
+    public boolean addProperty(String applicationName, String key, String value) {
         boolean isSaved;
         try {
             isSaved = settingServiceImplHelper.addProperty(applicationName, key, value);
@@ -86,7 +86,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public void updateProperty(String applicationName, String key, String value) throws SettingsException {
+    public void updateProperty(String applicationName, String key, String value) {
 
         try {
            settingServiceImplHelper.updateProperty(applicationName, key, value);
@@ -96,7 +96,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     }
 
     @Override
-    public void deleteProperty(String applicationName, String key) throws SettingNotFoundException {
+    public void deleteProperty(String applicationName, String key) {
         Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
 
         if (property == null) {
@@ -108,7 +108,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     }
 
     @Override
-    public void deleteApplication(String applicationName) throws SettingNotFoundException {
+    public void deleteApplication(String applicationName) {
         Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
 
         if (application == null) {
@@ -120,7 +120,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public boolean addApplication(String applicationName, String description) throws SettingsException {
+    public boolean addApplication(String applicationName, String description) {
         boolean isSaved;
         try {
             isSaved = settingServiceImplHelper.addApplication(applicationName, description);
@@ -133,11 +133,27 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public void updateApplication(String applicationName, String description) throws SettingsException {
+    public void updateApplication(String applicationName, String description) {
         try {
             settingServiceImplHelper.updateApplication(applicationName, description);
         } catch (Exception e) {
             throw new SettingsException("Application not updated" + System.lineSeparator() + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Application> getApplications() {
+        return applicationRepository.findAll();
+    }
+
+    @Override
+    public Application getApplication(String applicationName) {
+        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+
+        if (application != null) {
+            return application;
+        } else {
+            throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
         }
     }
 }

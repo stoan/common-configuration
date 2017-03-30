@@ -1,7 +1,6 @@
 package com.housescent.commonconfiguration.service;
 
-import com.housescent.commonconfiguration.api.exception.SettingNotFoundException;
-import com.housescent.commonconfiguration.api.exception.SettingsException;
+import com.housescent.commonconfiguration.persistence.entities.Application;
 import com.housescent.commonconfiguration.persistence.entities.Property;
 
 import javax.ejb.Local;
@@ -14,22 +13,25 @@ import java.util.Map;
 @Local
 public interface ConfigurationServiceLocal {
 
-    String getPropertyValue(String applicationName, String key) throws SettingsException;
+    String getPropertyValue(String applicationName, String key);
 
-    Map<String, String> getPropertiesForApplicationAsMap(String applicationName) throws SettingsException;
+    Map<String, String> getPropertiesForApplicationAsMap(String applicationName);
 
-    List<Property> getPropertiesForApplication(String applicationName) throws SettingsException;
+    List<Property> getPropertiesForApplication(String applicationName);
 
-    boolean addProperty(String applicationName, String key, String value) throws SettingsException;
+    boolean addProperty(String applicationName, String key, String value);
 
-    void updateProperty(String applicationName, String key, String value) throws SettingsException;
+    void updateProperty(String applicationName, String key, String value);
 
-    void deleteProperty(String applicationName, String key) throws SettingNotFoundException;
+    void deleteProperty(String applicationName, String key);
 
-    void deleteApplication(String applicationName) throws SettingNotFoundException;
+    void deleteApplication(String applicationName);
 
-    boolean addApplication(String applicationName, String description) throws SettingsException;
+    boolean addApplication(String applicationName, String description);
 
-    void updateApplication(String applicationName, String description) throws SettingsException;
+    void updateApplication(String applicationName, String description);
 
+    List<Application> getApplications();
+
+    Application getApplication(String applicationName);
 }

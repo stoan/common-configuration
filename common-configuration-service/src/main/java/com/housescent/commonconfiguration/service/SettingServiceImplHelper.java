@@ -2,7 +2,6 @@ package com.housescent.commonconfiguration.service;
 
 import com.housescent.commonconfiguration.api.exception.DuplicateSettingException;
 import com.housescent.commonconfiguration.api.exception.SettingNotFoundException;
-import com.housescent.commonconfiguration.api.exception.SettingsException;
 import com.housescent.commonconfiguration.persistence.entities.Application;
 import com.housescent.commonconfiguration.persistence.entities.Property;
 import com.housescent.commonconfiguration.persistence.repositories.ApplicationRepository;
@@ -28,7 +27,7 @@ public class SettingServiceImplHelper {
     @Inject
     private ApplicationRepository applicationRepository;
 
-    public boolean addApplication(String applicationName, String description) throws SettingsException {
+    public boolean addApplication(String applicationName, String description) {
 
         Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
         if (application != null) {
@@ -40,7 +39,7 @@ public class SettingServiceImplHelper {
         return application.getId() > 0;
     }
 
-    public void updateApplication(String applicationName, String description) throws SettingsException {
+    public void updateApplication(String applicationName, String description) {
 
         Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
 
@@ -51,7 +50,7 @@ public class SettingServiceImplHelper {
         application.setDescription(description);
     }
 
-    public boolean addProperty(String applicationName, String key, String value) throws SettingsException {
+    public boolean addProperty(String applicationName, String key, String value) {
 
         Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
         if (application == null) {
@@ -68,7 +67,7 @@ public class SettingServiceImplHelper {
         return property.getId() > 0;
     }
 
-    public void updateProperty(String applicationName, String key, String value) throws SettingsException {
+    public void updateProperty(String applicationName, String key, String value) {
 
         Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
         if (property == null) {

@@ -1,10 +1,13 @@
 package com.housescent.commonconfiguration.web.api;
 
-import com.housescent.commonsettings.persistence.entities.Application;
-import com.housescent.commonsettings.persistence.entities.Property;
-import com.housescent.commonsettings.service.local.LocalSettingService;
-import org.springframework.web.bind.annotation.*;
 
+import com.housescent.commonconfiguration.persistence.entities.Application;
+import com.housescent.commonconfiguration.persistence.entities.Property;
+import com.housescent.commonconfiguration.service.ConfigurationServiceLocal;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.ws.rs.*;
 import java.util.List;
 
 /**
@@ -14,63 +17,67 @@ import java.util.List;
 @Path("/admin/")
 public class LocalServiceController {
 
-    private LocalSettingService localSettingService;
+    private ConfigurationServiceLocal localSettingService;
 
-    public LocalServiceController(LocalSettingService localSettingService) {
+    @Inject
+    public LocalServiceController(ConfigurationServiceLocal localSettingService) {
         this.localSettingService = localSettingService;
     }
 
     @GET
     @Path("fetchPropertiesForApplication")
-    public List<Property> getPropertiesForApplication(@RequestParam(value = "applicationName") String applicationName) {
+    @Produces("application/json")
+    public List<Property> getPropertiesForApplication(@QueryParam(value = "applicationName") String applicationName) {
         return localSettingService.getPropertiesForApplication(applicationName);
     }
 
     @POST
     @Path("saveProperty")
-    public boolean addProperty(@RequestParam(value = "applicationName") String applicationName, @RequestParam(value = "key") String key, @RequestParam(value = "value") String value) {
+    public boolean addProperty(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "key") String key, @QueryParam(value = "value") String value) {
         return localSettingService.addProperty(applicationName, key, value);
     }
 
     @POST
     @Path("updateProperty")
-    public void updateProperty(@RequestParam(value = "applicationName") String applicationName, @RequestParam(value = "key") String key, @RequestParam(value = "value") String value) {
+    public void updateProperty(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "key") String key, @QueryParam(value = "value") String value) {
         localSettingService.updateProperty(applicationName, key, value);
     }
 
     @DELETE
     @Path("deleteProperty")
-    public void deleteProperty(@RequestParam(value = "applicationName") String applicationName, @RequestParam(value = "key") String key) {
+    public void deleteProperty(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "key") String key) {
         localSettingService.deleteProperty(applicationName, key);
     }
 
     @POST
     @Path("saveApplication")
-    public boolean addApplication(@RequestParam(value = "applicationName") String applicationName, @RequestParam(value = "description") String description) {
+    public boolean addApplication(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "description") String description) {
         return localSettingService.addApplication(applicationName, description);
     }
 
     @GET
     @Path("fetchApplications")
+    @Produces("application/json")
     public List<Application> getApplications() {
         return localSettingService.getApplications();
     }
 
     @DELETE
     @Path("deleteApplication")
-    public void deleteApplication(@RequestParam(value = "applicationName") String applicationName) {
+    public void deleteApplication(@QueryParam(value = "applicationName") String applicationName) {
         localSettingService.deleteApplication(applicationName);
     }
 
     @POST
     @Path("updateApplication")
-    public void updateApplication(@RequestParam(value = "applicationName") String applicationName, @RequestParam(value = "description") String description) {
+    public void updateApplication(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "description") String description) {
         localSettingService.updateApplication(applicationName, description);
     }
 
     @GET
     @Path("fetchApplication")
-    public Application getApplication(@RequestParam(value = "applicationName") String applicationName) {
+    @Produces("application/json")
+    public Application getApplication(@QueryParam(value = "applicationName") String applicationName) {
         return localSettingService.getApplication(applicationName);
     }
 }
