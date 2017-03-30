@@ -1,5 +1,7 @@
 package com.housescent.commonconfiguration.service;
 
+import com.housescent.commonconfiguration.api.exception.DuplicateSettingException;
+import com.housescent.commonconfiguration.api.exception.SettingNotFoundException;
 import com.housescent.commonconfiguration.api.exception.SettingsException;
 import com.housescent.commonconfiguration.persistence.entities.Application;
 import com.housescent.commonconfiguration.persistence.entities.Property;
@@ -15,6 +17,11 @@ import javax.inject.Inject;
 @Stateless
 public class SettingServiceImplHelper {
 
+    public static final String PROPERTY_NOT_FOUND = "Property not found";
+    public static final String APPLICATION_NOT_FOUND = "Application not found";
+    public static final String APPLICATION_ALREADY_EXISTS = "Application already exists";
+    public static final String PROPERTY_ALREADY_EXIST = "Property already exist";
+
     @Inject
     private PropertyRepository propertyRepository;
 
@@ -23,33 +30,51 @@ public class SettingServiceImplHelper {
 
     public boolean addApplication(String applicationName, String description) throws SettingsException {
 
-        Application application = applicationRepository.save(new Application(applicationName,description));
+        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+        if (application != null) {
+            throw new DuplicateSettingException(APPLICATION_ALREADY_EXISTS);
+        }
+
+        application = applicationRepository.save(new Application(applicationName,description));
 
         return application.getId() > 0;
     }
 
     public void updateApplication(String applicationName, String description) throws SettingsException {
 
-        Application application = applicationRepository.findByApplicationname(applicationName);
+        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+
+        if (application == null) {
+            throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
+        }
+
         application.setDescription(description);
     }
 
     public boolean addProperty(String applicationName, String key, String value) throws SettingsException {
 
-        Application application = applicationRepository.findByApplicationname(applicationName);
-
+        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
         if (application == null) {
-          application = applicationRepository.save(new Application(applicationName,applicationName));
+            throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
         }
 
-        Property property = propertyRepository.save(new Property(key, value, application));
+        Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
+        if (property != null) {
+            throw new DuplicateSettingException(PROPERTY_ALREADY_EXIST);
+        }
+
+        property = propertyRepository.save(new Property(key, value, application));
 
         return property.getId() > 0;
     }
 
     public void updateProperty(String applicationName, String key, String value) throws SettingsException {
 
-        Property property = propertyRepository.findByApplication_applicationNameAndKey(applicationName, key);
+        Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
+        if (property == null) {
+            throw new SettingNotFoundException(PROPERTY_NOT_FOUND);
+        }
+
         property.setValue(value);
     }
 }

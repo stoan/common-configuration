@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.housescent.commonconfiguration.service.SettingServiceImplHelper.*;
+
 /**
  * Created by  Siya Sosibo on 13-Jan-16.
  */
@@ -22,6 +24,7 @@ import java.util.Map;
 @Remote(ConfigurationServiceRemote.class)
 public class ConfigurationServiceImpl implements ConfigurationServiceLocal, ConfigurationServiceRemote {
 
+    public static final String APPLICATION_SETTINGS_NOT_FOUND_FOR_APPLICATION_NAME = "Application settings not found for application name: ";
     @EJB
     private SettingServiceImplHelper settingServiceImplHelper;
     @Inject
@@ -31,22 +34,22 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     private ApplicationRepository applicationRepository;
 
     @Override
-    public String getPropertyValue(String applicationName, String key) {
-        Property property = propertyRepository.findByApplication_applicationNameAndKey(applicationName, key);
+    public String getPropertyValue(String applicationName, String key) throws SettingNotFoundException {
+        Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
 
         if (property != null) {
             return property.getValue();
         } else {
-            return null;
+            throw new SettingNotFoundException(PROPERTY_NOT_FOUND);
         }
     }
 
     @Override
     public List<Property> getPropertiesForApplication(String applicationName) throws SettingNotFoundException {
-        List<Property> properties = propertyRepository.findByApplication_applicationName(applicationName);
+        List<Property> properties = propertyRepository.findByApplication_applicationNameIgnoreCase(applicationName);
 
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(properties)) {
-            throw new SettingNotFoundException("Application settings not found for application name: " + applicationName);
+            throw new SettingNotFoundException(APPLICATION_SETTINGS_NOT_FOUND_FOR_APPLICATION_NAME + applicationName);
         }
 
         return properties;
@@ -54,10 +57,10 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     public Map<String, String> getPropertiesForApplicationAsMap(String applicationName) throws SettingNotFoundException {
-        List<Property> props = propertyRepository.findByApplication_applicationName(applicationName);
+        List<Property> props = propertyRepository.findByApplication_applicationNameIgnoreCase(applicationName);
 
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(props)) {
-            throw new SettingNotFoundException("Application settings not found for application name: " + applicationName);
+            throw new SettingNotFoundException(APPLICATION_SETTINGS_NOT_FOUND_FOR_APPLICATION_NAME + applicationName);
         }
 
         Map<String, String> properties = new HashMap<>();
@@ -93,19 +96,26 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     }
 
     @Override
-    public void deleteProperty(String applicationName, String key) {
-        Property property = propertyRepository.findByApplication_applicationNameAndKey(applicationName, key);
-        if (property != null) {
-            propertyRepository.remove(property);
+    public void deleteProperty(String applicationName, String key) throws SettingNotFoundException {
+        Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
+
+        if (property == null) {
+            throw new SettingNotFoundException(PROPERTY_NOT_FOUND);
         }
+
+            propertyRepository.remove(property);
+
     }
 
     @Override
-    public void deleteApplication(String applicationName) {
-        Application application = applicationRepository.findByApplicationname(applicationName);
-        if (application != null) {
-            applicationRepository.remove(application);
+    public void deleteApplication(String applicationName) throws SettingNotFoundException {
+        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+
+        if (application == null) {
+            throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
         }
+            applicationRepository.remove(application);
+
     }
 
     @Override

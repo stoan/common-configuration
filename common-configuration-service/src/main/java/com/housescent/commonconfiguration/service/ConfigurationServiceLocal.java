@@ -1,5 +1,6 @@
 package com.housescent.commonconfiguration.service;
 
+import com.housescent.commonconfiguration.api.exception.SettingNotFoundException;
 import com.housescent.commonconfiguration.api.exception.SettingsException;
 import com.housescent.commonconfiguration.persistence.entities.Property;
 
@@ -23,9 +24,9 @@ public interface ConfigurationServiceLocal {
 
     void updateProperty(String applicationName, String key, String value) throws SettingsException;
 
-    void deleteProperty(String applicationName, String key);
+    void deleteProperty(String applicationName, String key) throws SettingNotFoundException;
 
-    void deleteApplication(String applicationName);
+    void deleteApplication(String applicationName) throws SettingNotFoundException;
 
     boolean addApplication(String applicationName, String description) throws SettingsException;
 
