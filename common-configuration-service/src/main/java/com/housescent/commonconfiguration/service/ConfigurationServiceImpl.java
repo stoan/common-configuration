@@ -8,6 +8,7 @@ import com.housescent.commonconfiguration.persistence.entities.Application;
 import com.housescent.commonconfiguration.persistence.entities.Property;
 import com.housescent.commonconfiguration.persistence.repositories.ApplicationRepository;
 import com.housescent.commonconfiguration.persistence.repositories.PropertyRepository;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.ejb.*;
 import javax.inject.Inject;
@@ -109,12 +110,12 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     public void deleteApplication(String applicationName) {
-        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+        List<Application> applications = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
 
-        if (application == null) {
+        if (CollectionUtils.isEmpty(applications)) {
             throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
         }
-            applicationRepository.remove(application);
+            applicationRepository.remove(applications.get(0));
 
     }
 
@@ -148,12 +149,12 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     public Application getApplication(String applicationName) {
-        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+        List<Application> applications = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
 
-        if (application != null) {
-            return application;
-        } else {
+        if (CollectionUtils.isEmpty(applications)) {
             throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
+        } else {
+            return applications.get(0);
         }
     }
 }

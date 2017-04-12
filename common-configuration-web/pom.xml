@@ -10,48 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>common-configuration-web</artifactId>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.housescent.common-configuration</groupId>
             <artifactId>common-configuration-service</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        
-        <!-- JSON-P API -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.json</groupId>
-            <artifactId>jboss-json-api_1.0_spec</artifactId>
-        </dependency>
-        <!-- RESTEasy implementation of JAX-RS API -->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!-- RESTEasy implementation of JAX-RS Client API -->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-client</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!-- RESTEasy plugin to use JSON-P as a provider -->
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-json-p-provider</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson2-provider</artifactId>
-            <scope>provided</scope>
         </dependency>
 
     </dependencies>

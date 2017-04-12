@@ -6,9 +6,11 @@ import com.housescent.commonconfiguration.persistence.entities.Application;
 import com.housescent.commonconfiguration.persistence.entities.Property;
 import com.housescent.commonconfiguration.persistence.repositories.ApplicationRepository;
 import com.housescent.commonconfiguration.persistence.repositories.PropertyRepository;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by Siya Sosibo on 17-Mar-16 17:09.
@@ -29,31 +31,34 @@ public class SettingServiceImplHelper {
 
     public boolean addApplication(String applicationName, String description) {
 
-        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
-        if (application != null) {
+        List<Application> applications = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+
+        if (CollectionUtils.isNotEmpty(applications)) {
             throw new DuplicateSettingException(APPLICATION_ALREADY_EXISTS);
         }
 
-        application = applicationRepository.save(new Application(applicationName,description));
+        Application application = applicationRepository.save(new Application(applicationName,description));
 
         return application.getId() > 0;
     }
 
     public void updateApplication(String applicationName, String description) {
 
-        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+        List<Application> applications = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
 
-        if (application == null) {
+        if (CollectionUtils.isEmpty(applications)) {
+
             throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
         }
 
-        application.setDescription(description);
+        applications.get(0).setDescription(description);
     }
 
     public boolean addProperty(String applicationName, String key, String value) {
 
-        Application application = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
-        if (application == null) {
+        List<Application> applications = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
+
+        if (CollectionUtils.isEmpty(applications)) {
             throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
         }
 
@@ -62,7 +67,7 @@ public class SettingServiceImplHelper {
             throw new DuplicateSettingException(PROPERTY_ALREADY_EXIST);
         }
 
-        property = propertyRepository.save(new Property(key, value, application));
+        property = propertyRepository.save(new Property(key, value, applications.get(0)));
 
         return property.getId() > 0;
     }

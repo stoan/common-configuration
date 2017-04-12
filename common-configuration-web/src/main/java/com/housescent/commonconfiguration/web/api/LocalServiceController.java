@@ -19,6 +19,9 @@ public class LocalServiceController {
 
     private ConfigurationServiceLocal localSettingService;
 
+    public LocalServiceController() {
+    }
+
     @Inject
     public LocalServiceController(ConfigurationServiceLocal localSettingService) {
         this.localSettingService = localSettingService;

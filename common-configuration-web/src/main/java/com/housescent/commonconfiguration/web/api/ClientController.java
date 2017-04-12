@@ -20,6 +20,9 @@ public class ClientController {
 
     private ConfigurationServiceRemote settingService;
 
+    public ClientController() {
+    }
+
     @Inject
     public ClientController(ConfigurationServiceRemote settingService) {
         this.settingService = settingService;

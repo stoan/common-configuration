@@ -14,8 +14,9 @@
 
     <dependencies>
     <dependency>
+        <artifactId>common-configuration-web</artifactId>
         <groupId>com.housescent.common-configuration</groupId>
-        <artifactId>common-configuration-service</artifactId>
+        <type>war</type>
         <version>${project.version}</version>
     </dependency>
     </dependencies>
@@ -30,11 +31,13 @@
                     <applicationName>common-configuration</applicationName>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
                     <version>6</version>
+                    <skinnyWars>true</skinnyWars>
                     <modules>
-                        <ejbModule>
+                        <webModule>
+                            <artifactId>common-configuration-web</artifactId>
                             <groupId>com.housescent.common-configuration</groupId>
-                            <artifactId>common-configuration-service</artifactId>
-                        </ejbModule>
+                            <contextRoot>/commonconfig</contextRoot>
+                        </webModule>
                     </modules>
                 </configuration>
             </plugin>
