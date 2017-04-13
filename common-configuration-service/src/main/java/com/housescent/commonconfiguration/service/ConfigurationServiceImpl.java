@@ -35,18 +35,18 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     private ApplicationRepository applicationRepository;
 
     @Override
-    public String getPropertyValue(String applicationName, String key) {
-        Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
+    public String fetchPropertyValue(String applicationName, String key) {
+        List<Property> properties = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
 
-        if (property != null) {
-            return property.getValue();
+        if (CollectionUtils.isNotEmpty(properties)) {
+            return properties.get(0).getValue();
         } else {
             throw new SettingNotFoundException(PROPERTY_NOT_FOUND);
         }
     }
 
     @Override
-    public List<Property> getPropertiesForApplication(String applicationName) {
+    public List<Property> fetchPropertiesForApplication(String applicationName) {
         List<Property> properties = propertyRepository.findByApplication_applicationNameIgnoreCase(applicationName);
 
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(properties)) {
@@ -57,7 +57,7 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     }
 
     @Override
-    public Map<String, String> getPropertiesForApplicationAsMap(String applicationName) {
+    public Map<String, String> fetchPropertiesForApplicationAsMap(String applicationName) {
         List<Property> props = propertyRepository.findByApplication_applicationNameIgnoreCase(applicationName);
 
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(props)) {
@@ -74,10 +74,10 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public boolean addProperty(String applicationName, String key, String value) {
+    public boolean saveProperty(String applicationName, String key, String value) {
         boolean isSaved;
         try {
-            isSaved = settingServiceImplHelper.addProperty(applicationName, key, value);
+            isSaved = settingServiceImplHelper.saveProperty(applicationName, key, value);
         } catch (Exception e) {
             throw new SettingsException("Property not created, Property key: " + key + " may already exist" + System.lineSeparator() + e.getMessage());
         }
@@ -98,13 +98,13 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     public void deleteProperty(String applicationName, String key) {
-        Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
+        List<Property> properties = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
 
-        if (property == null) {
+        if (CollectionUtils.isEmpty(properties)) {
             throw new SettingNotFoundException(PROPERTY_NOT_FOUND);
         }
 
-            propertyRepository.remove(property);
+            propertyRepository.remove(properties.get(0));
 
     }
 
@@ -121,10 +121,10 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public boolean addApplication(String applicationName, String description) {
+    public boolean saveApplication(String applicationName, String description) {
         boolean isSaved;
         try {
-            isSaved = settingServiceImplHelper.addApplication(applicationName, description);
+            isSaved = settingServiceImplHelper.saveApplication(applicationName, description);
         } catch (Exception e) {
             throw new SettingsException("Application not created, application Name: " + applicationName + " may already exist" + System.lineSeparator() + e.getMessage());
         }
@@ -143,12 +143,12 @@ public class ConfigurationServiceImpl implements ConfigurationServiceLocal, Conf
     }
 
     @Override
-    public List<Application> getApplications() {
+    public List<Application> fetchApplications() {
         return applicationRepository.findAll();
     }
 
     @Override
-    public Application getApplication(String applicationName) {
+    public Application fetchApplication(String applicationName) {
         List<Application> applications = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
 
         if (CollectionUtils.isEmpty(applications)) {

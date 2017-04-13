@@ -1,33 +1,15 @@
 package com.housescent.commonconfiguration.persistence.configuration;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Default;
-import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.PersistenceContext;
 
-@ApplicationScoped
-public class EntityManagerProducer
-{
-    @PersistenceUnit
-    private EntityManagerFactory entityManagerFactory;
-
+/**
+ * Created by Siya Sosibo on 16-Nov-15.
+ */
+public class EntityManagerProducer {
     @Produces
-    @Default
-    @RequestScoped
-    public EntityManager create()
-    {
-        return this.entityManagerFactory.createEntityManager();
-    }
+    @PersistenceContext
+    private EntityManager em;
 
-    public void dispose(@Disposes @Default EntityManager entityManager)
-    {
-        if (entityManager.isOpen())
-        {
-            entityManager.close();
-        }
-    }
 }

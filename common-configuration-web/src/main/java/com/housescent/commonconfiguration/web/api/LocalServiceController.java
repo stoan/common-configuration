@@ -30,14 +30,15 @@ public class LocalServiceController {
     @GET
     @Path("fetchPropertiesForApplication")
     @Produces("application/json")
-    public List<Property> getPropertiesForApplication(@QueryParam(value = "applicationName") String applicationName) {
-        return localSettingService.getPropertiesForApplication(applicationName);
+    public List<Property> fetchPropertiesForApplication(@QueryParam(value = "applicationName") String applicationName) {
+        return localSettingService.fetchPropertiesForApplication(applicationName);
     }
 
     @POST
     @Path("saveProperty")
-    public boolean addProperty(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "key") String key, @QueryParam(value = "value") String value) {
-        return localSettingService.addProperty(applicationName, key, value);
+    @Produces("text/plain")
+    public boolean saveProperty(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "key") String key, @QueryParam(value = "value") String value) {
+        return localSettingService.saveProperty(applicationName, key, value);
     }
 
     @POST
@@ -54,15 +55,16 @@ public class LocalServiceController {
 
     @POST
     @Path("saveApplication")
-    public boolean addApplication(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "description") String description) {
-        return localSettingService.addApplication(applicationName, description);
+    @Produces("text/plain")
+    public boolean saveApplication(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "description") String description) {
+        return localSettingService.saveApplication(applicationName, description);
     }
 
     @GET
     @Path("fetchApplications")
     @Produces("application/json")
-    public List<Application> getApplications() {
-        return localSettingService.getApplications();
+    public List<Application> fetchApplications() {
+        return localSettingService.fetchApplications();
     }
 
     @DELETE
@@ -80,7 +82,7 @@ public class LocalServiceController {
     @GET
     @Path("fetchApplication")
     @Produces("application/json")
-    public Application getApplication(@QueryParam(value = "applicationName") String applicationName) {
-        return localSettingService.getApplication(applicationName);
+    public Application fetchApplication(@QueryParam(value = "applicationName") String applicationName) {
+        return localSettingService.fetchApplication(applicationName);
     }
 }

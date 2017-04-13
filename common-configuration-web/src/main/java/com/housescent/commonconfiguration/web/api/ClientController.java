@@ -2,8 +2,8 @@ package com.housescent.commonconfiguration.web.api;
 
 import com.housescent.commonconfiguration.api.service.ConfigurationServiceRemote;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,28 +18,29 @@ import java.util.Map;
 @Path("/settings/")
 public class ClientController {
 
+    @EJB
     private ConfigurationServiceRemote settingService;
 
     public ClientController() {
     }
 
-    @Inject
     public ClientController(ConfigurationServiceRemote settingService) {
         this.settingService = settingService;
     }
 
     @GET
     @Path("fetchValue")
-    public Response getProperty(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "key") String key) {
-        String value = settingService.getPropertyValue(applicationName, key);
+    @Produces("text/plain")
+    public Response fetchProperty(@QueryParam(value = "applicationName") String applicationName, @QueryParam(value = "key") String key) {
+        String value = settingService.fetchPropertyValue(applicationName, key);
         return Response.status(200).entity(value).build();
     }
 
     @GET
     @Path("fetchProperties")
     @Produces("application/json")
-    public Map<String, String> getSettings(@QueryParam(value = "applicationName") String applicationName) {
-        Map<String, String> propertiesForApplicationAsMap = settingService.getPropertiesForApplicationAsMap(applicationName);
+    public Map<String, String> fetchSettings(@QueryParam(value = "applicationName") String applicationName) {
+        Map<String, String> propertiesForApplicationAsMap = settingService.fetchPropertiesForApplicationAsMap(applicationName);
         return propertiesForApplicationAsMap;
     }
 }

@@ -28,6 +28,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
 
@@ -71,6 +72,60 @@
             <artifactId>deltaspike-partial-bean-module-impl</artifactId>
             <version>${deltaspike.version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-impl</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-test-control-module-api</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-test-control-module-impl</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.cdictrl</groupId>
+            <artifactId>deltaspike-cdictrl-weld</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-proxy-module-api</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-proxy-module-impl-asm5</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.cdictrl</groupId>
+            <artifactId>deltaspike-cdictrl-api</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

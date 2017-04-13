@@ -13,13 +13,13 @@ import java.util.Map;
 @Local
 public interface ConfigurationServiceLocal {
 
-    String getPropertyValue(String applicationName, String key);
+    String fetchPropertyValue(String applicationName, String key);
 
-    Map<String, String> getPropertiesForApplicationAsMap(String applicationName);
+    Map<String, String> fetchPropertiesForApplicationAsMap(String applicationName);
 
-    List<Property> getPropertiesForApplication(String applicationName);
+    List<Property> fetchPropertiesForApplication(String applicationName);
 
-    boolean addProperty(String applicationName, String key, String value);
+    boolean saveProperty(String applicationName, String key, String value);
 
     void updateProperty(String applicationName, String key, String value);
 
@@ -27,11 +27,11 @@ public interface ConfigurationServiceLocal {
 
     void deleteApplication(String applicationName);
 
-    boolean addApplication(String applicationName, String description);
+    boolean saveApplication(String applicationName, String description);
 
     void updateApplication(String applicationName, String description);
 
-    List<Application> getApplications();
+    List<Application> fetchApplications();
 
-    Application getApplication(String applicationName);
+    Application fetchApplication(String applicationName);
 }

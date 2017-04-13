@@ -29,7 +29,7 @@ public class SettingServiceImplHelper {
     @Inject
     private ApplicationRepository applicationRepository;
 
-    public boolean addApplication(String applicationName, String description) {
+    public boolean saveApplication(String applicationName, String description) {
 
         List<Application> applications = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
 
@@ -54,7 +54,7 @@ public class SettingServiceImplHelper {
         applications.get(0).setDescription(description);
     }
 
-    public boolean addProperty(String applicationName, String key, String value) {
+    public boolean saveProperty(String applicationName, String key, String value) {
 
         List<Application> applications = applicationRepository.findByApplicationNameIgnoreCase(applicationName);
 
@@ -62,23 +62,23 @@ public class SettingServiceImplHelper {
             throw new SettingNotFoundException(APPLICATION_NOT_FOUND);
         }
 
-        Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
-        if (property != null) {
+        List<Property> properties = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
+        if (CollectionUtils.isNotEmpty(properties)) {
             throw new DuplicateSettingException(PROPERTY_ALREADY_EXIST);
         }
 
-        property = propertyRepository.save(new Property(key, value, applications.get(0)));
+        Property property = propertyRepository.save(new Property(key, value, applications.get(0)));
 
         return property.getId() > 0;
     }
 
     public void updateProperty(String applicationName, String key, String value) {
 
-        Property property = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
-        if (property == null) {
+        List<Property> properties = propertyRepository.findByApplication_applicationNameIgnoreCaseAndKeyIgnoreCase(applicationName, key);
+        if (CollectionUtils.isEmpty(properties)) {
             throw new SettingNotFoundException(PROPERTY_NOT_FOUND);
         }
 
-        property.setValue(value);
+        properties.get(0).setValue(value);
     }
 }
