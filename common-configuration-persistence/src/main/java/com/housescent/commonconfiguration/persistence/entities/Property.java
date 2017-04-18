@@ -1,5 +1,8 @@
 package com.housescent.commonconfiguration.persistence.entities;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -19,6 +22,7 @@ public class Property extends BaseEntity implements Serializable {
     private String value;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "APPLICATIONS_ID")
     private Application application;
 
