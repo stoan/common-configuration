@@ -28,5 +28,6 @@ This service is implemented using JavaEE core APIs and more
 ### To be implemented
 
 * ~~Expose service via REST~~
+* Add integretion tests(e.g. Arquillian or embedded EJB container)
 * Add UI front-End (e.g. JSF)
 * Add Security (e.g. Apache Shiro)
