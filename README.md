@@ -27,6 +27,6 @@ This service is implemented using JavaEE core APIs and more
 ## Roadmap
 ### To be implemented
 
-* Expose service via REST
+* ~~Expose service via REST~~
 * Add UI front-End (e.g. JSF)
 * Add Security (e.g. Apache Shiro)
